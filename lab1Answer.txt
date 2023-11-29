@@ -1,0 +1,94 @@
+student
++-------------+-------------+------+-----+---------+-------+
+| Field       | Type        | Null | Key | Default | Extra |
++-------------+-------------+------+-----+---------+-------+
+| sno         | varchar(15) | NO   | PRI | NULL    |       |
+| sname       | varchar(20) | YES  | UNI | NULL    |       |
+| ssex        | varchar(5)  | YES  |     | NULL    |       |
+| sage        | smallint    | YES  |     | NULL    |       |
+| sdept       | varchar(20) | YES  |     | NULL    |       |
+| scholarship | varchar(10) | YES  |     | NULL    |       |
++-------------+-------------+------+-----+---------+-------+
+
+course
++---------+-------------+------+-----+---------+-------+
+| Field   | Type        | Null | Key | Default | Extra |
++---------+-------------+------+-----+---------+-------+
+| cno     | varchar(15) | NO   | PRI | NULL    |       |
+| cname   | varchar(40) | YES  | UNI | NULL    |       |
+| cpno    | varchar(4)  | YES  | MUL | NULL    |       |
+| ccredit | smallint    | YES  |     | NULL    |       |
++---------+-------------+------+-----+---------+-------+
+
+sc
++-------+-------------+------+-----+---------+-------+
+| Field | Type        | Null | Key | Default | Extra |
++-------+-------------+------+-----+---------+-------+
+| sno   | varchar(15) | NO   | PRI | NULL    |       |
+| cno   | varchar(15) | NO   | PRI | NULL    |       |
+| grade | smallint    | YES  |     | NULL    |       |
++-------+-------------+------+-----+---------+-------+
+1.查询全体学生的学号、姓名和年龄
+select sno,sname,sage
+from student;
+
+2.查询所有计算机系学生的详细记录
+select student.*, sc.*
+from student left join sc on(student.sno=sc.sno)
+where student.sdept='CS';
+
+3.找出考试成绩为优秀（90 分及以上）或不及格的学生的学号、课程号及成绩
+select *
+from sc
+where grade >= 90 or grade < 60;
+
+4.查询年龄不在19~20 岁之间的学生姓名、性别和年龄
+select sname,ssex,sage
+from student
+where sage < 19 or sage > 20;
+
+select sname,ssex,sage
+from student as s1
+where not exists(
+select *
+from student as s2
+where s1.sno=s2.sno and s2.sage >= 19 and s2.sage <= 20
+);
+
+5.查询数学系（MA）、信息系（IS)的学生的姓名和所在系
+select sname,sdept
+from student
+where sdept in ('MA','CS');
+
+6.查询名称中包含“数据”的所有课程的课程号、课程名及其学分
+select cno,cname,ccredit
+from course
+where cname like '%数据%';
+
+7.找出所有没有选修课成绩的学生学号和课程号
+select sno,cno
+from sc
+where grade is null;
+
+8.查询学生200215121 选修课的最高分、最低分以及平均成绩
+select max(grade),min(grade),avg(grade)
+from sc
+where sno='200215121';
+
+9.查询选修了2 号课程的学生的学号及其成绩，查询结果按成绩升序排列
+select sno,grade
+from sc
+where cno='2'
+order by grade asc;
+
+10.查询每个系名及其学生的平均年龄
+select sdept,avg(sage)
+from student
+group by(sdept);
+
+思考：如何查询学生平均年龄在19 岁以下（含19 岁）的系别及其学生的平均年龄？
+Sselect sdept,sage
+from student
+group by(sdept,sage)
+having avg(sage) <= 19;
+

@@ -1,0 +1,59 @@
+
+创建学生表
+create table student(
+sno varchar(15) not null unique,
+sname varchar(20) unique,
+ssex varchar(5),
+sage smallint,
+sdept varchar(20),
+scholarship varchar(10),
+primary key(sno)
+);
+
+创建课程表
+create table course(
+cno varchar(15) not null unique,
+cname varchar(40) unique,
+cpno varchar(4),
+ccredit smallint,
+foreign key(cpno) references course (cno),
+primary key(cno)
+);
+
+创建学生课程表
+create table sc(
+sno varchar(15),
+cno varchar(15),
+grade smallint,
+primary key(sno,cno),
+foreign key(sno) references student(sno),
+foreign key(cno) references course(cno)
+);
+
+insert into student values('200215121','李勇','男',20,'CS'，'否'); 
+insert into student values('200215122','刘晨','女',19,'CS'，'否'); 
+insert into student values('200215123','王敏','女',18,'MA'，'否'); 
+insert into student values('200215125','张立','男',19,'IS'，'否'); 
+go /*为表Student 添加数据*/ 
+insert into course values('1', '数据库',NULL,4); 
+insert into course values('2', '数学',NULL,2);
+ insert into course values('3', '信息系统',NULL,4); 
+ insert into course values('4', '操作系统',NULL,3); 
+ insert into course values('5', '数据结构',NULL,4); 
+ insert into course values('6', '数据处理',NULL, 2);
+insert into course values('7', 'pascal语言',NULL,4); 
+ go 
+  update Course set Cpno = '5' where Cno = '1'; 
+  update Course set Cpno = '1' where Cno = '3';
+   update Course set Cpno = '6' where Cno = '4'; 
+   update Course set Cpno = '7' where Cno = '5';
+    update Course set Cpno = '6' where Cno = '7'; 
+
+insert into SC values('200215121', '1',92); -
+    insert into SC values('200215121', '2',85); 
+    insert into SC values('200215121', '3',88);
+     insert into SC values('200215122', '2',90);
+      insert into SC values('200215122', '3',80); 
+      /*为表SC 添加数据*/         go  
+②  利用可视化环境交互式输入数据。 
+

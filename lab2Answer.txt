@@ -1,0 +1,60 @@
+ (1）查询每门课程及其被选情况（输出所有课程中每门课的课程号、课程名称、选修该课程的学生学号及成绩--如果没有学生选择该课，则相应的学生学号及成绩为空值）。 
+select course.cno,course.cname,sc.sno,sc.grade
+from course left join sc on (course.cno=sc.cno)
+order by(course.cno) asc;
+
+（2）查询与“张立”同岁的学生的学号、姓名和年龄。（要求使用至少3 种方法求解） 
+select sno,sname,sage
+from student
+where sage = (
+select sage
+from student
+where sname='张立'
+);
+
+select sno,sname,sage
+from student
+where sage in (
+select sage
+from student
+where sname='张立'
+);
+
+select s1.sno,s1.sname,s1.sage
+from student as s1
+where exists(
+select *
+from student as s2
+where s2.sname='张立' and s1.sage=s2.sage
+);
+
+（3）查询选修了3 号课程而且成绩为良好（80~89 分）的所有学生的学号和姓名。 
+select sno,sname
+from student
+where sno in(
+select sno
+from sc
+where cno='3' and grade between 80 and 89
+);
+
+select student.sno,student.sname
+from student join sc on (student.sno=sc.sno)
+where sc.grade between 80 and 89 and sc.cno='3';
+
+（4）查询学生200215122 选修的课程号、课程名         （思考：如何查询学生200215122 选修的课程号、课程名及成绩？） 
+select sc.cno,course.cname,sc.grade
+from sc join course on (sc.cno=course.cno)
+where sc.sno='200215122';
+
+（5）找出每个学生低于他所选修课程平均成绩5 分以上的课程号。（输出学号和课程号） 
+select sno,cno,grade
+from sc
+group by sno
+having grade < avg(grade)-5;
+
+
+（6）查询比所有男生年龄都小的女生的学号、姓名和年龄。 
+（7）查询所有选修了2 号课程的学生姓名及所在系。 
+（8）使用update 语句把平均成绩为良的学生的年龄增加2 岁，并查询出来。 
+（9）使用insert 语句增加两门课程：C 语言和人工智能，并查询出来 
+（10）使用delete 语句把人工智能课程删除，并查询出来。
