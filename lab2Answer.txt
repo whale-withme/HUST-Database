@@ -54,7 +54,42 @@ having grade < avg(grade)-5;
 
 
 （6）查询比所有男生年龄都小的女生的学号、姓名和年龄。 
+select s2.sno,s2.sname,s2.sage
+from student as s2
+where ssex='女' and
+sage < (
+select min(sage)
+from student as s1
+where ssex='男'
+);
 （7）查询所有选修了2 号课程的学生姓名及所在系。 
-（8）使用update 语句把平均成绩为良的学生的年龄增加2 岁，并查询出来。 
+select sname,sdept
+from sc join student on (student.sno=sc.sno)
+where sc.cno='2';
+
+select sname,sdept
+from student
+where exists
+(select *
+from sc
+where sno=student.sno and cno='2'
+);
+
+（8）使用update 语句把平均成绩为良的学生的年龄增加2 岁，并查询出来。
+update student
+set sage=sage-2
+where sno in (
+select sno
+from sc
+group by(sno)
+having avg(grade) >= 80 and avg(grade) <= 90
+);
+
 （9）使用insert 语句增加两门课程：C 语言和人工智能，并查询出来 
+insert into course values('8','c语言',null,2);
+insert into course values('9','人工智能',5,3);
+select * from course;
 （10）使用delete 语句把人工智能课程删除，并查询出来。
+delete from course
+where cname='人工智能';
+select * from course;
