@@ -1,0 +1,138 @@
+(1) 创建CS 系的视图CS_View 
+create view CS_View
+as
+select *
+from student
+where sdept='CS';
+
+(2) 在视图CS_View 上查询CS 系选修了1 号课程的学生 
+select *
+from CS_View
+where sno in (
+    select sno 
+    from sc 
+    where cno='1'
+);
+
+(3) 创建IS 系成绩大于80 的学生的视图IS_View 
+create view IS_View
+as 
+select *
+from student
+where sdept='IS' and sno in (
+    select sno 
+    from sc 
+    where grade > 80
+);
+
+(4) 在视图IS_View 查询IS 系成绩大于80 的学生 
+select * from IS_View;
+
+(5) 删除视图IS_View 
+drop view IS_View;
+
+(6)  利用可视化窗口创建2 个不同的用户U1 和U2,利用系统管理员给U1 授予Student 表的
+查询和更新的权限，给U2 对SC 表授予插入的权限。然后用U1 登录，分别
+    1）查询学生表的信息；
+    2）把所有学生的年龄增加1 岁，然后查询；
+    3）删除IS 系的学生；
+    4）查询CS 系的选课信息。
+    用U2 登录，分别
+    1）在SC 表中插入1 条记录（‘200215122’，‘1’，75）；
+    2）查询SC 表的信息
+    3）查询视图CS_View 的信息。 
+授予Student 表的查询和更新的权限:
+create user 'U1'@'localhost' identified by '11';
+create user 'U2'@'localhost' identified by '22';
+grant select,update on CSEDB_U202212097.student to 'U1'@'localhost';
+grant insert on CSEDB_U202212097.sc to 'U2'@'localhost';
+1）查询学生表的信息；
+select * from student;
+2）把所有学生的年龄增加1
+update student
+set sage=sage+1;
+3）删除IS学生
+delete from student
+where sdept='IS';
+4）查询CS选课信息
+select *
+from student left join sc on(student.sno = sc.sno)
+where student.sdept='IS';
+
+1）在SC插入记录
+insert into sc values('200215122','1',75);
+2）查询SC
+select * from sc;
+3）查询视图CS_View
+select * from CS_View;
+
+
+(7)  用系统管理员登录，收回U1 的所有权限
+revoke all on CSEDB_U202212097.student from 'U1'@'localhost'; 
+
+(8)  用U1 登录，查询学生表的信息 
+select * from student;
+
+(9)  用系统管理员登录 
+
+(10)  对SC 表建立一个更新触发器，当更新了SC 表的成绩时，如果更新后的成绩大于等于
+95，则检查该成绩的学生是否有奖学金，如果奖学金是“否”，则修改为“是”。如果修改后的
+成绩小于95，则检查该学生的其他成绩是不是有大于95 的，如果都没有，且修改前的成绩是大于 95 时，则把其奖学金修改为”否”。
+然后进行成绩修改，并进行验证是否触发器正确
+执行。1）首先把某个学生成绩修改为98，查询其奖学金。2）再把刚才的成绩修改为80，
+再查询其奖学金。 
+注解：
+    这里的触发器定义在sc表上，更新操作发生在student表上。执行update操作时，new.[column]可以指代同一行中的其他列的元素值，
+    同时还需要考虑到在两张表中的连接要求。
+
+delimiter //
+create trigger scholarship_sc before update
+on sc for each row
+begin
+    if new.grade>=95 then
+        update student 
+        set scholarship='是'
+        where student.sno=new.sno and student.scholarship='否';
+    else
+        update student
+        set scholarship='否'
+        where student.sno=new.sno and student.scholarship='是' and sno not in (
+            select sno
+            from sc
+            where grade>=95 and new.cno<>cno
+        );
+    end if;
+end //
+delimiter ;
+（11）删除刚定义的触发器 
+frop trigger scholarship_sc;
+
+（12）定义一个存储过程计算CS 系的课程的平均成绩和最高成绩，在查询分析器或查询编
+辑器中执行存储过程，查看结果。 
+
+
+（13）定义一个带学号为参数的查看某个学号的所有课程的成绩，查询结果要包含学生姓
+名。进行验证。 
+（14）把上一题改成函数。再进行验证。 
+（15）在SC 表上定义一个完整性约束，要求成绩再0-100 之间。定义约束前，先把某个学
+生的成绩修改成120，进行查询，再修改回来。定义约束后，再把该学生成绩修改为120，
+然后进行查询。 
+
+
+delimiter //
+create trigger _hello_
+before update
+on hello 
+for each row
+begin 
+    if new.name='A' then 
+    set new.grade=100;
+    else
+    set new.grade=0;
+    end if;
+end //
+delimiter ;
+
+update hello
+set num=1
+where name='A';
