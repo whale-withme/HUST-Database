@@ -108,31 +108,51 @@ delimiter ;
 frop trigger scholarship_sc;
 
 （12）定义一个存储过程计算CS 系的课程的平均成绩和最高成绩，在查询分析器或查询编
-辑器中执行存储过程，查看结果。 
-
-
-（13）定义一个带学号为参数的查看某个学号的所有课程的成绩，查询结果要包含学生姓
-名。进行验证。 
-（14）把上一题改成函数。再进行验证。 
-（15）在SC 表上定义一个完整性约束，要求成绩再0-100 之间。定义约束前，先把某个学
-生的成绩修改成120，进行查询，再修改回来。定义约束后，再把该学生成绩修改为120，
-然后进行查询。 
-
-
+辑器中执行存储过程，查看结果.
+注：这里还有很多过程化的sql操作，用declare声明变量，流程控制语句等等，或者再是结合高级程序语言写嵌入式
 delimiter //
-create trigger _hello_
-before update
-on hello 
-for each row
+create procedure calculate()
 begin 
-    if new.name='A' then 
-    set new.grade=100;
-    else
-    set new.grade=0;
-    end if;
+    select avg(grade),max(grade)
+    from sc
+    where sno in (
+        select sno
+        from student
+        where sdept='CS'
+    );
 end //
 delimiter ;
 
-update hello
-set num=1
-where name='A';
+（13）定义一个带学号为参数的查看某个学号的所有课程的成绩，查询结果要包含学生姓
+名。进行验证。 
+delimiter //
+create procedure check_grade(in code varchar(15))
+begin 
+    select student.sname,student.sno,sc.cno,sc.grade
+    from student join sc on (student.sno=sc.sno)
+    where student.sno=code;
+end //
+delimiter ;
+检查:
+call check_grade('200215121');
+
+（14）把上一题改成函数。再进行验证。
+注：这个解法参考学长的，自己写的创建新表语法一直有错。 
+delimiter //
+create function grade_function(stuno varchar(15)) returns int
+reads sql data
+begin 
+    create temporary table temp
+    select student.sno,student.sname,sc.cno,sc.grade
+    from student,sc
+    where student.sno=stuno and student.sno=sc.sno;
+    return 0; 
+end //
+delimiter ;
+
+
+（15）在SC 表上定义一个完整性约束，要求成绩再0-100 之间。定义约束前，先把某个学
+生的成绩修改成120，进行查询，再修改回来。定义约束后，再把该学生成绩修改为120，
+然后进行查询。 
+修改成绩：update sc set grade=120 where sno='200215121' and cno=1;
+添加完整性约束：alter table sc add constraint grade_range check(grade between 0 and 100);
