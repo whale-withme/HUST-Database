@@ -1,11 +1,12 @@
 import os
+import mysql.connector
 
 #学生表操作集合
+
+
 #查找所有学生信息
-
-
 def query_all_studentInfo(cnx):
-    cursor = cnx.cursor()
+    cursor =  cnx.cursor()
     query = 'select * from student'
     ret = '%s\t\t%s\t%s\t%s\t%s\t%s\t\n' % ('sno', 'sname', 'ssex', 'sage', 'sdept', 'scholarship')
     cursor.execute(query)
@@ -15,7 +16,7 @@ def query_all_studentInfo(cnx):
 
 # 插入学生信息
 def insert_studentInfo(cnx, ssno, ssname, sssex, ssage, ssdept,sscholarship):
-    cursor = cnx.cursor()
+    cursor =  cnx.cursor()
     
     query = "insert into student values('%s', '%s', '%s', %d, '%s', '%s')" \
                 % (ssno, ssname, sssex, ssage, ssdept,sscholarship)
@@ -28,7 +29,7 @@ def insert_studentInfo(cnx, ssno, ssname, sssex, ssage, ssdept,sscholarship):
 
 # 删除学生记录
 def delete_studentInfo(cnx, condition):
-    cursor = cnx.cursor()
+    cursor =  cnx.cursor()
     query = "delete from student where sno='%s'" % (condition)
     try:
         cursor.execute(query)
@@ -39,7 +40,7 @@ def delete_studentInfo(cnx, condition):
 
 # 更新学生信息
 def update_studentInfo(cnx, Sno, column, new):
-    cursor = cnx.cursor()
+    cursor =  cnx.cursor()
     if column == '1':
         column = 'sname'
     elif column == '2':
