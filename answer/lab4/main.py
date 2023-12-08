@@ -4,14 +4,14 @@
 # 2.对数据库的更新、删除、插入都要通过cnx.commit提交到数据库
 # 主函数文件
 
-import pymysql
-import mysql.connector
+'''import pymysql
+import mysql.connector'''
 import menu
 import Login
 
     
 def main():
-    global cnx
+    #global cnx
     cnx = Login.login()
     menu.Menu(cnx)
     print("已退出")

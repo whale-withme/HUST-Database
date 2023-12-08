@@ -2,6 +2,7 @@ import basic.studentOP as studentOP
 import basic.courseOP as courseOP
 import basic.scOP as scOP
 import grade.statisticOP as statisticOP
+import util
 
 #主菜单
 def Menu(cnx):
@@ -14,6 +15,8 @@ def Menu(cnx):
         if button == '1':
             menu_student_modified(cnx)
             print("退出学生信息管理成功\n")
+            util.pause_cmd()
+            util.clear_cmd()
         elif button == '2':
             menu_course_modified(cnx)
             print("退出课程信息管理成功\n")
@@ -39,6 +42,10 @@ def menu_grade_statistics(cnx):
                 print("查询平均成绩错误\n")
             else:
                 print(result)
+        elif op =='4':
+            result = statisticOP.excellent_rate(cnx)
+            if result == False:
+                print("查询优秀率错误")
         elif op == '0':
             choice = 0
 
