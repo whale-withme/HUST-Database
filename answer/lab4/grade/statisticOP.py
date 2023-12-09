@@ -72,7 +72,8 @@ def excellent_rate(cnx):
             number.append(float(num))
         
         # 优秀人数
-        excellent_number_tmp = "create temporary table tmp select student.sdept,student.sno from student join sc on student.sno=sc.sno where sc.grade>=90"
+        excellent_number_tmp = "create temporary table tmp select student.sdept,student.sno \
+        from student join sc on student.sno=sc.sno where sc.grade>=90"
         cursor.execute(excellent_number_tmp)
         #创建虚表存放人数
         execellent_number_temp = "create temporary table temp select distinct sno,sdept from tmp"
@@ -82,11 +83,11 @@ def excellent_rate(cnx):
         for (sdept__, excellent_number) in cursor:
             excellent.append(float(excellent_number))
         
-        print("各个系别的优秀率\n")
+        print("\tsdept\texcellent_rate")
         for i in range(len(sdept)):
             rate = (excellent[i]/number[i]) * 100
             rate = str(round(rate, 1))
-            print(sdept[i]+'\t'+rate+'%')
+            print('\t'+sdept[i]+'\t'+rate+'%')
  
     except mysql.connector.errors:
         return False

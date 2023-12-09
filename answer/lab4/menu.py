@@ -3,20 +3,21 @@ import basic.courseOP as courseOP
 import basic.scOP as scOP
 import grade.statisticOP as statisticOP
 import util
+import grade.rank as ranking
 
 #主菜单
 def Menu(cnx):
     choice = 1
+    util.clear_cmd()
     while choice != 0:
         print("\t\t欢迎进入学生信息管理系统")
         print("\t1.学生信息\t2.课程信息\t3.选课信息")
-        print("\t4.学生成绩统计\t0.退出系统")
+        print("\t4.学生成绩统计\t5.学生成绩排名\t6.学生基本信息\t")
+        print("\t0.退出系统")
         button = input()
         if button == '1':
             menu_student_modified(cnx)
             print("退出学生信息管理成功\n")
-            util.pause_cmd()
-            util.clear_cmd()
         elif button == '2':
             menu_course_modified(cnx)
             print("退出课程信息管理成功\n")
@@ -24,18 +25,35 @@ def Menu(cnx):
             menu_sc_modified(cnx)
         elif button == '4':
             menu_grade_statistics(cnx)
+        elif button == '5':
+            menu_grade_ranking(cnx)
         elif button == '0':
             choice = 0
+            break
+        util.pause_cmd()
+        util.clear_cmd()
+
+# 学生成绩排名
+def menu_grade_ranking(cnx):
+    util.clear_cmd()
+    print("\t\t\t学生成绩排名")
+    cno = input("课程号\n")
+    sdept = input("系别\n")
+    result = ranking.grade_ranking_sdept(cnx, cno, sdept)
+    if result == False:
+        print("成绩排名错误")
+    else:
+        print(result)
 
 # 学生成绩统计
 def menu_grade_statistics(cnx):
     choice = 1
+    util.clear_cmd()
     while choice != 0:
         print("\t\t\t学生成绩统计菜单")
         print("\t1.平均成绩\t2.最好成绩\t3.最差成绩")
         print("\t4.优秀率\t5.不及格人数\t0.退出")
-        op = input()
-    
+        op = input()    
         if op == '1':
             result = statisticOP.avg_grade(cnx)
             if result == False:
@@ -52,6 +70,7 @@ def menu_grade_statistics(cnx):
 # 选课信息维护
 def menu_sc_modified(cnx):
     choice = 1
+    util.clear_cmd()
     while choice != 0:
         print("\t\t\t选课信息维护菜单")
         print("\t1.录入学生成绩\t2.修改学生成绩\t3.查看选课信息\n\t0.退出")
@@ -89,6 +108,7 @@ def menu_sc_modified(cnx):
 # 课程信息表维护
 def menu_course_modified(cnx):
     choice = 1
+    util.clear_cmd()
     while choice != 0:
         print("\t\t\t课程信息表维护菜单\n\t1.查询所有课程信息\t2.增加课程信息\t3.更新课程信息\n \
     4.删除没有学生选课的课程记录\t5. 删除给定课程号的记录\t\t 0.退出课程表操作\n 请输入你要执行的操作")
@@ -133,6 +153,7 @@ def menu_course_modified(cnx):
 # 学生信息表操作
 def menu_student_modified(cnx):
     choice = 1
+    util.clear_cmd()
     while choice != 0:
         print("\t\t\t学生信息表维护菜单\n\t1.查询所有学生信息\t2.插入学生信息\t3.更新学生信息\n\t4.删除学生记录\t\t\
               0.退出学生表操作\n 请输入你要执行的操作")
