@@ -1,4 +1,3 @@
-import os
 import mysql.connector
 
 #学生表操作集合
@@ -65,3 +64,22 @@ def update_studentInfo(cnx, Sno, column, new):
         return False
     cnx.commit()
     return True
+'''
+select student.*,sc.cno,sc.grade
+from student left join sc on student.sno=sc.sno
+where student.sno='200215121'
+'''
+def query_single_studentInfo(cnx, sno):
+    query = "select student.*,sc.cno,sc.grade\
+    from student left join sc on student.sno=sc.sno\
+    where student.sno='%s'" % (sno)
+    ret = "sno\tsname\tssex\tsage\tsdept\tscholarship\tcno\tgrade\n"
+    cursor = cnx.cursor()
+    try:
+        cursor.execute(query)
+        for (sno, sname, ssex, sage, sdept, scholarship, cno, grade) in cursor:
+            ret += "%s\t%s\t%s\t%d\t%s\t%s\t%s\t%s\n" % (sno, sname, ssex, sage, sdept, scholarship, cno, grade)
+    except mysql.connector.errors:
+        return False
+    return ret
+    

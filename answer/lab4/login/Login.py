@@ -1,4 +1,4 @@
-import util
+import util.util as util
 import getpass
 import mysql.connector
 

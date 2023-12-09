@@ -2,7 +2,7 @@ import basic.studentOP as studentOP
 import basic.courseOP as courseOP
 import basic.scOP as scOP
 import grade.statisticOP as statisticOP
-import util
+import util.util as util
 import grade.rank as ranking
 
 #主菜单
@@ -12,7 +12,7 @@ def Menu(cnx):
     while choice != 0:
         print("\t\t欢迎进入学生信息管理系统")
         print("\t1.学生信息\t2.课程信息\t3.选课信息")
-        print("\t4.学生成绩统计\t5.学生成绩排名\t6.学生基本信息\t")
+        print("\t4.学生成绩统计\t5.学生成绩排名\t")
         print("\t0.退出系统")
         button = input()
         if button == '1':
@@ -32,6 +32,8 @@ def Menu(cnx):
             break
         util.pause_cmd()
         util.clear_cmd()
+
+
 
 # 学生成绩排名
 def menu_grade_ranking(cnx):
@@ -60,10 +62,14 @@ def menu_grade_statistics(cnx):
                 print("查询平均成绩错误\n")
             else:
                 print(result)
+                util.pause_cmd()
+                util.clear_cmd()
         elif op =='4':
             result = statisticOP.excellent_rate(cnx)
             if result == False:
                 print("查询优秀率错误")
+            util.pause_cmd()
+            util.clear_cmd()
         elif op == '0':
             choice = 0
 
@@ -84,6 +90,8 @@ def menu_sc_modified(cnx):
                 print("插入学生信息错误\n")
             else:
                 print("插入信息成功\n")
+            util.pause_cmd()
+            util.clear_cmd()
 
         elif op == '2':
             sno = input("要修改的学号\n")
@@ -94,6 +102,8 @@ def menu_sc_modified(cnx):
                 print("修改错误\n")
             else:
                 print("修改成功\n")
+            util.pause_cmd()
+            util.clear_cmd()
         
         elif op == '3':
             result = scOP.query_scInfo(cnx)
@@ -101,6 +111,8 @@ def menu_sc_modified(cnx):
                 print("查询错误\n")
             else:
                 print(result)
+            util.pause_cmd()
+            util.clear_cmd()
 
         elif op == '0':
             choice = 0
@@ -119,6 +131,8 @@ def menu_course_modified(cnx):
                 print("查询错误")
                 continue
             print(result)
+            util.pause_cmd()
+            util.clear_cmd()
 
         elif op == '2':
             cno = input("课程号\n")
@@ -130,6 +144,8 @@ def menu_course_modified(cnx):
                 print("插入错误")
             else:
                 print("插入成功")
+            util.pause_cmd()
+            util.clear_cmd()
         
         elif op == '4':
             result = courseOP.delelete_courseInfo_NotInsc(cnx)
@@ -137,6 +153,8 @@ def menu_course_modified(cnx):
                 print("删除无选课记录的课程信息失败\n")
             else:
                 print("删除无选课记录的课程信息成功\n")
+            util.pause_cmd()
+            util.clear_cmd()
         
         elif op == '5':
             cno = input("需要删除课程的课程号\n")
@@ -145,6 +163,8 @@ def menu_course_modified(cnx):
                 print("删除课程错误\n")
             else:
                 print("删除课程成功\n")
+            util.pause_cmd()
+            util.clear_cmd()
 
         elif op == '0':
             choice = 0
@@ -155,17 +175,22 @@ def menu_student_modified(cnx):
     choice = 1
     util.clear_cmd()
     while choice != 0:
-        print("\t\t\t学生信息表维护菜单\n\t1.查询所有学生信息\t2.插入学生信息\t3.更新学生信息\n\t4.删除学生记录\t\t\
-              0.退出学生表操作\n 请输入你要执行的操作")
+        #print("\t\t\t学生信息表维护菜单\n\t1.查询所有学生信息\t2.插入学生信息\t3.更新学生信息\n\t4.删除学生记录\t\t\
+        #      0.退出学生表操作\n 请输入你要执行的操作")
+        print("\t\t\t学生信息表菜单")
+        print("\t1.查询所有学生信息\t2.插入学生信息\t3.更新学生信息")
+        print("\t4.删除学生记录\t5.查询特定学生信息")
+        print("\t0.退出")
         op = input()
-
         #输出所有信息
         if op == '1':
             result = studentOP.query_all_studentInfo(cnx)
             print(result)
+            util.pause_cmd()
+            util.clear_cmd()
 
         #插入学生信息
-        if op == '2':
+        elif op == '2':
             ssno = input("学号\n")
             ssname = input("姓名\n")
             sssex = input("性别\n")
@@ -178,9 +203,11 @@ def menu_student_modified(cnx):
                 print("插入学生信息错误\n")
             else:
                 print("插入成功\n")
+            util.pause_cmd()
+            util.clear_cmd()
 
         #删除学生信息
-        if op == '4':
+        elif op == '4':
             #print("输入你要删除记录的条件(注意,使用sql语言)")
             condition = input("输入你要删除记录的学号\n")
             error = studentOP.delete_studentInfo(cnx, condition)
@@ -188,9 +215,11 @@ def menu_student_modified(cnx):
                 print("删除", condition, "学生记录错误\n")
             else:
                 print("删除成功\n")
+            util.pause_cmd()
+            util.clear_cmd()
         
         #修改学生信息
-        if op == '3':
+        elif op == '3':
             Sno = input("请输入你要修改信息的学号\n")
             choice = input("修改属性:\n\t1.姓名\t2.性别\t3.年龄\t4.系别\t5.是否获得过奖学金\n")
             new = input("修改后的"+choice+"属性值是：\n")
@@ -199,6 +228,17 @@ def menu_student_modified(cnx):
                 print("更新错误\n")
             else:
                 print("更新成功\n")
+            util.pause_cmd()
+            util.clear_cmd()
 
-        if op == '0':
+        elif op == '5':
+            sno = input("学号\n")
+            result = studentOP.query_single_studentInfo(cnx, sno)
+            if result == False:
+                print("查询错误\n")
+            else:
+                print(result)
+            util.pause_cmd()
+            util.clear_cmd()
+        elif op == '0':
             choice = 0
