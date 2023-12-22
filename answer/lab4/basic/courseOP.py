@@ -1,6 +1,21 @@
 import mysql.connector
 # 课程信息操作
 
+
+#更新课程信息
+def modifiy_courseInfo(cnx, cno, element, new_value):
+    cursor = cnx.cursor()
+    if element == 'ccredit':
+        new_value = (int)(new_value)
+        update = "update course set %s=%d where cno='%s'" % (element, new_value, cno)
+    else:
+        update = "update course set %s='%s' where cno='%s'" % (element, new_value, cno)
+    try:
+        cursor.execute(update)
+    except mysql.connector.errors:
+        return False
+    return True
+
 # 查询所有课程信息
 def query_all_courseInfo(cnx):
     cursor = cnx.cursor()

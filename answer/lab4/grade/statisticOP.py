@@ -42,8 +42,8 @@ def min_grade(cnx):
         cursor.execute(query)
     except mysql.connector.errors:
         return False
-    for (sdept, max) in cursor:
-        ret += "\t%s\t%s\n" % (sdept, max)
+    for (sdept, min) in cursor:
+        ret += "\t%s\t%s\n" % (sdept, min)
     return ret
     
 # 统计优秀率
@@ -94,3 +94,16 @@ def excellent_rate(cnx):
     return True
 
 # 统计不及格人数
+def number_unpass(cnx):
+    cursor = cnx.cursor()
+    ret = '\tsdept\tnumber_unpass\n'
+    query = 'select student.sdept,count(*) \
+    from sc join student on student.sno=sc.sno \
+    where sc.grade < 60 group by(student.sdept)'
+    try:
+        cursor.execute(query)
+    except mysql.connector.errors:
+        return False
+    for (sdept, number) in cursor:
+            ret += '\t%s\t%s\n' % (sdept, number)
+    return ret

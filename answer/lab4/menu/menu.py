@@ -64,12 +64,36 @@ def menu_grade_statistics(cnx):
                 print(result)
                 util.pause_cmd()
                 util.clear_cmd()
+        elif op == '2':
+            result = statisticOP.max_grade(cnx)
+            if result == False:
+                print('查询最好成绩失败')
+            else:
+                print(result)
+                util.pause_cmd()
+                util.clear_cmd()
+        elif op == '3':
+            result = statisticOP.min_grade(cnx)
+            if result == False:
+                print('查询最差成绩失败')
+            else:
+                print(result)
+                util.pause_cmd()
+                util.clear_cmd()
         elif op =='4':
             result = statisticOP.excellent_rate(cnx)
             if result == False:
                 print("查询优秀率错误")
             util.pause_cmd()
             util.clear_cmd()
+        elif op == '5':
+            result = statisticOP.number_unpass(cnx)
+            if result == False:
+                print('查询不及格人数失败')
+            else:
+                print(result)
+                util.pause_cmd()
+                util.clear_cmd()
         elif op == '0':
             choice = 0
 
@@ -144,6 +168,18 @@ def menu_course_modified(cnx):
                 print("插入错误")
             else:
                 print("插入成功")
+            util.pause_cmd()
+            util.clear_cmd()
+
+        elif op == '3':
+            cno = input("课程号\n")
+            element = input('属性\n')
+            new_value = input('更新后的值\n')
+            result = courseOP.modifiy_courseInfo(cnx, cno, element, new_value)
+            if result == False:
+                print('更新失败')
+            else:
+                print('更新成功')
             util.pause_cmd()
             util.clear_cmd()
         

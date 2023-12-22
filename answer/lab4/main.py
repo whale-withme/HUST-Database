@@ -17,5 +17,5 @@ def main():
     menu.Menu(cnx)
     print("已退出")
     cnx.close()
-
-main()
+if __name__ == '__main__':
+    main()
