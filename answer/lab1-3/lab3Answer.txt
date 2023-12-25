@@ -26,7 +26,7 @@ where sdept='IS' and sno in (
 );
 
 (4) 在视图IS_View 查询IS 系成绩大于80 的学生 
-select * from IS_View;
+select * from IS_View where grade>=80;
 
 (5) 删除视图IS_View 
 drop view IS_View;
@@ -47,7 +47,7 @@ create user 'U2'@'localhost' identified by '22';
 grant select,update on CSEDB_U202212097.student to 'U1'@'localhost';
 grant insert on CSEDB_U202212097.sc to 'U2'@'localhost';
 1）查询学生表的信息；
-select * from student;
+    select * from student;
 2）把所有学生的年龄增加1
 update student
 set sage=sage+1;
@@ -105,7 +105,7 @@ begin
 end //
 delimiter ;
 （11）删除刚定义的触发器 
-frop trigger scholarship_sc;
+drop trigger scholarship_sc;
 
 （12）定义一个存储过程计算CS 系的课程的平均成绩和最高成绩，在查询分析器或查询编
 辑器中执行存储过程，查看结果.

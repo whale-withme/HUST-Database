@@ -87,7 +87,7 @@ from student
 group by(sdept);
 
 思考：如何查询学生平均年龄在19 岁以下（含19 岁）的系别及其学生的平均年龄？
-Sselect sdept,sage
+select sdept,sage
 from student
 group by(sdept,sage)
 having avg(sage) <= 19;
