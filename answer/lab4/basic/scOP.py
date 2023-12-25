@@ -9,6 +9,7 @@ def insert_scInfo(cnx, sno, cno, grade):
         cursor.execute(insert)
     except mysql.connector.errors:
         return False
+    cnx.commit()
     return True
 
 # 查看学生选课
@@ -33,4 +34,5 @@ def update_scInfo(cnx, sno, cno, grade_new):
         cursor.execute(update)
     except mysql.connector.errors:
         return False
+    cnx.commit()
     return True

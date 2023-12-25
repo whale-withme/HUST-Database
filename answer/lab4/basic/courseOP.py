@@ -14,6 +14,7 @@ def modifiy_courseInfo(cnx, cno, element, new_value):
         cursor.execute(update)
     except mysql.connector.errors:
         return False
+    cnx.commit()
     return True
 
 # 查询所有课程信息
@@ -54,6 +55,7 @@ def delelete_courseInfo_NotInsc(cnx):
         return False
     query = "SET FOREIGN_KEY_CHECKS = 1"
     cnx.execute(query)
+    cnx.commit()
     return True
 
 def delete_courseInfo(cnx, cno):
@@ -64,4 +66,5 @@ def delete_courseInfo(cnx, cno):
         cursor.execute(delete)
     except mysql.connector.errors:
         return False
+    cnx.commit()
     return True
